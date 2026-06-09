@@ -184,23 +184,12 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.sidebar-photo-wrap::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  background: var(--accent-gradient);
-  z-index: -1;
-  opacity: 0.8;
-  filter: blur(2px);
-}
-
 .sidebar-photo {
   width: 125px;
   height: 125px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--bg-base);
+  border: 3px solid var(--border-color);
   box-shadow: var(--shadow-md);
 }
 
