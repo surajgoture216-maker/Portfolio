@@ -1,228 +1,213 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MCA Marks Cards | Suraj Goture</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Inter', sans-serif; background: #f9fafb; color: #111827; min-height: 100vh; }
-
-  .topbar { background: white; border-bottom: 1px solid #e5e7eb; padding: 0 6vw; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
-  .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; color: #6b7280; text-decoration: none; font-size: 0.875rem; font-weight: 500; padding: 0.4rem 0.75rem; border-radius: 8px; border: 1.5px solid #e5e7eb; background: white; transition: all 0.2s; }
-  .back-btn:hover { color: #3b82f6; border-color: #3b82f6; background: #eff6ff; }
-  .topbar-title { font-size: 1rem; font-weight: 700; color: #111827; letter-spacing: -0.3px; }
-  .topbar-title span { color: #3b82f6; }
-
-  .page-header { padding: 3rem 6vw 2rem; max-width: 1000px; margin: auto; }
-  .page-header h1 { font-size: 1.75rem; font-weight: 700; color: #111827; letter-spacing: -0.4px; margin-bottom: 0.3rem; }
-  .page-header p { color: #6b7280; font-size: 0.9rem; }
-  .divider { width: 32px; height: 3px; background: #3b82f6; border-radius: 2px; margin-top: 0.5rem; }
-  .degree-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: #eff6ff; border: 1.5px solid #bfdbfe; color: #2563eb; font-size: 0.78rem; font-weight: 600; padding: 0.3rem 0.85rem; border-radius: 100px; margin-top: 0.75rem; }
-
-  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1.25rem; padding: 0 6vw 4rem; max-width: 1000px; margin: auto; }
-
-  .card { background: white; border: 1.5px solid #e5e7eb; border-radius: 14px; overflow: hidden; cursor: pointer; transition: all 0.25s; opacity: 0; transform: translateY(20px); animation: fadeUp 0.4s ease forwards; }
-  .card:hover { border-color: #3b82f6; box-shadow: 0 8px 28px rgba(59,130,246,0.12); transform: translateY(-4px); }
-  .card:nth-child(1) { animation-delay: 0.05s; }
-  .card:nth-child(2) { animation-delay: 0.10s; }
-  .card:nth-child(3) { animation-delay: 0.15s; }
-  .card:nth-child(4) { animation-delay: 0.20s; }
-  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
-  .card-img-wrap { position: relative; width: 100%; height: 155px; background: #f3f4f6; overflow: hidden; }
-  .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-  .card:hover .card-img-wrap img { transform: scale(1.04); }
-  .card-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #3b82f6; }
-  .card-placeholder i { font-size: 2rem; opacity: 0.5; }
-  .card-placeholder span { font-size: 0.73rem; font-weight: 500; opacity: 0.6; }
-  .card-overlay { position: absolute; inset: 0; background: rgba(59,130,246,0.78); display: flex; align-items: center; justify-content: center; gap: 0.45rem; opacity: 0; transition: opacity 0.25s; color: white; font-size: 0.875rem; font-weight: 600; }
-  .card:hover .card-overlay { opacity: 1; }
-
-  .card-body { padding: 0.85rem 1rem; }
-  .card-sem { font-size: 0.7rem; font-weight: 600; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.2rem; }
-  .card-title { font-size: 0.9rem; font-weight: 600; color: #111827; margin-bottom: 0.15rem; line-height: 1.3; }
-  .card-sub { font-size: 0.77rem; color: #9ca3af; }
-
-  /* pursuing badge */
-  .pursuing { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; font-weight: 600; color: #16a34a; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.15rem 0.5rem; border-radius: 100px; margin-top: 0.3rem; }
-  .pursuing::before { content: '●'; animation: blink 1.5s infinite; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 1.5rem; backdrop-filter: blur(4px); }
-  .lightbox.open { display: flex; }
-  .lb-inner { background: white; border-radius: 16px; max-width: 680px; width: 100%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; animation: lbIn 0.25s ease; }
-  @keyframes lbIn { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
-  .lb-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid #e5e7eb; flex-shrink: 0; }
-  .lb-title { font-size: 0.95rem; font-weight: 600; color: #111827; }
-  .lb-sub { font-size: 0.78rem; color: #6b7280; margin-top: 0.1rem; }
-  .lb-close { width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid #e5e7eb; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #6b7280; font-size: 0.9rem; transition: all 0.2s; flex-shrink: 0; }
-  .lb-close:hover { border-color: #ef4444; color: #ef4444; background: #fef2f2; }
-  .lb-img-wrap { flex: 1; overflow-y: auto; display: flex; align-items: center; justify-content: center; background: #f9fafb; min-height: 200px; }
-  .lb-img-wrap img { max-width: 100%; max-height: 65vh; object-fit: contain; display: block; }
-  .lb-img-wrap iframe { width: 100%; height: 65vh; border: none; }
-  .lb-no-img { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem; padding: 3rem; color: #9ca3af; text-align: center; }
-  .lb-no-img i { font-size: 2.8rem; color: #d1d5db; }
-  .lb-no-img p { font-size: 0.875rem; }
-  .lb-no-img small { font-size: 0.76rem; color: #d1d5db; }
-  .lb-footer { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; border-top: 1px solid #e5e7eb; flex-shrink: 0; gap: 1rem; }
-  .lb-nav { display: flex; gap: 0.5rem; }
-  .lb-nav button { display: flex; align-items: center; gap: 0.35rem; padding: 0.45rem 0.9rem; border-radius: 8px; border: 1.5px solid #e5e7eb; background: white; font-size: 0.8rem; font-weight: 500; color: #374151; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; }
-  .lb-nav button:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
-  .lb-nav button:disabled { opacity: 0.35; cursor: not-allowed; }
-  .lb-counter { font-size: 0.8rem; color: #9ca3af; }
-
-  @media (max-width: 600px) { .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 0.9rem; padding: 0 4vw 3rem; } .page-header { padding: 2rem 4vw 1.5rem; } .topbar { padding: 0 4vw; } .card-img-wrap { height: 120px; } }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCA Marks Cards | Suraj Goture</title>
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Core shared stylesheet -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="topbar">
-  <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
-  <div style="width:130px"></div>
-</div>
+  <!-- Top Bar Navbar -->
+  <div class="topbar">
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
+    <button class="theme-toggle-btn" id="subThemeToggle" title="Toggle Theme">
+      <i class="fa-solid fa-sun"></i>
+    </button>
+  </div>
 
-<div class="page-header">
-  <h1>MCA Marks Cards</h1>
-  <p>Click on any card to view the full marks card</p>
-  <div class="divider"></div>
-  <div class="degree-badge"><i class="fa-solid fa-graduation-cap"></i> Master of Computer Applications — Dayananda Sagar College Of Engineering, Bangalore</div>
-</div>
+  <!-- Ambient Glowing Background Shapes -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
 
-<div class="cards-grid">
-
-  <div class="card" onclick="openLightbox(0)">
-    <div class="card-img-wrap">
-      <img src="MCA 1ST SEM_watermark.pdf" alt="MCA Sem 1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="card-placeholder" style="display:none"><i class="fa-solid fa-file-lines"></i><span>1st sem</span></div>
-      <div class="card-overlay"><i class="fa-solid fa-eye"></i> View Card</div>
-    </div>
-    <div class="card-body">
-      <div class="card-sem">MCA · Semester 1</div>
-      <div class="card-title">First Semester</div>
-      <div class="card-sub">2024 – 2025</div>
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>MCA Marks Cards</h1>
+    <p>Click on any card below to view the corresponding academic marks sheet.</p>
+    <div class="degree-badge">
+      <i class="fa-solid fa-graduation-cap"></i> 
+      Master of Computer Applications — Dayananda Sagar College Of Engineering, Bangalore
     </div>
   </div>
 
-  <div class="card" onclick="openLightbox(1)">
-    <div class="card-img-wrap">
-      <img src="MCA 2nd.pdf" alt="MCA Sem 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="card-placeholder" style="display:none"><i class="fa-solid fa-file-lines"></i><span>2nd sem</span></div>
-      <div class="card-overlay"><i class="fa-solid fa-eye"></i> View Card</div>
-    </div>
-    <div class="card-body">
-      <div class="card-sem">MCA · Semester 2</div>
-      <div class="card-title">Second Semester</div>
-      <div class="card-sub">2024 – 2025</div>
-    </div>
-  </div>
+  <!-- Cards Grid -->
+  <div class="cards-grid">
 
-  <div class="card" onclick="openLightbox(2)">
-    <div class="card-img-wrap">
-      <img src="#" alt="MCA Sem 3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="card-placeholder" style="display:none"><i class="fa-solid fa-file-lines"></i><span>3rd sem</span></div>
-      <div class="card-overlay"><i class="fa-solid fa-eye"></i> View Card</div>
-    </div>
-    <div class="card-body">
-      <div class="card-sem">MCA · Semester 3</div>
-      <div class="card-title">Third Semester</div>
-      <div class="card-sub">2025 – 2026</div>
-    </div>
-  </div>
-
-  <div class="card" onclick="openLightbox(3)">
-    <div class="card-img-wrap">
-      <img src="#" alt="MCA Sem 4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="card-placeholder" style="display:none"><i class="fa-solid fa-file-lines"></i><span>4th sem</span></div>
-      <div class="card-overlay"><i class="fa-solid fa-eye"></i> View Card</div>
-    </div>
-    <div class="card-body">
-      <div class="card-sem">MCA · Semester 4</div>
-      <div class="card-title">Fourth Semester</div>
-      <div class="card-sub">2025 – 2026</div>
-      <div class="pursuing">Pursuing</div>
-    </div>
-  </div>
-
-</div>
-
-<div class="lightbox" id="lightbox" onclick="handleOverlayClick(event)">
-  <div class="lb-inner">
-    <div class="lb-header">
-      <div>
-        <div class="lb-title" id="lbTitle"></div>
-        <div class="lb-sub" id="lbSub"></div>
+    <!-- Sem 1 -->
+    <div class="card" onclick="openLightbox(0)">
+      <div class="card-img-wrap">
+        <img src="MCA 1ST SEM_watermark.pdf" alt="MCA Sem 1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-placeholder" style="display:none">
+          <i class="fa-solid fa-file-pdf"></i>
+          <span>Semester 1</span>
+        </div>
+        <div class="card-overlay"><i class="fa-solid fa-eye"></i> View Card</div>
       </div>
-      <button class="lb-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="lb-img-wrap" id="lbImgWrap"></div>
-    <div class="lb-footer">
-      <div class="lb-nav">
-        <button id="prevBtn" onclick="navigate(-1)"><i class="fa-solid fa-chevron-left"></i> Prev</button>
-        <button id="nextBtn" onclick="navigate(1)">Next <i class="fa-solid fa-chevron-right"></i></button>
+      <div class="card-body">
+        <div class="card-sem">MCA · Semester 1</div>
+        <div class="card-title">First Semester Marks Card</div>
+        <div class="card-sub">2024 – 2025</div>
       </div>
-      <span class="lb-counter" id="lbCounter">1 / 4</span>
+    </div>
+
+    <!-- Sem 2 -->
+    <div class="card" onclick="openLightbox(1)">
+      <div class="card-img-wrap">
+        <img src="MCA 2nd.pdf" alt="MCA Sem 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-placeholder" style="display:none">
+          <i class="fa-solid fa-file-pdf"></i>
+          <span>Semester 2</span>
+        </div>
+        <div class="card-overlay"><i class="fa-solid fa-eye"></i> View Card</div>
+      </div>
+      <div class="card-body">
+        <div class="card-sem">MCA · Semester 2</div>
+        <div class="card-title">Second Semester Marks Card</div>
+        <div class="card-sub">2024 – 2025</div>
+      </div>
+    </div>
+
+    <!-- Sem 3 -->
+    <div class="card" onclick="openLightbox(2)">
+      <div class="card-img-wrap">
+        <img src="MCA 3RD SEM.pdf" alt="MCA Sem 3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-placeholder" style="display:none">
+          <i class="fa-solid fa-file-pdf"></i>
+          <span>Semester 3</span>
+        </div>
+        <div class="card-overlay"><i class="fa-solid fa-eye"></i> View Card</div>
+      </div>
+      <div class="card-body">
+        <div class="card-sem">MCA · Semester 3</div>
+        <div class="card-title">Third Semester Marks Card</div>
+        <div class="card-sub">2025 – 2026</div>
+      </div>
+    </div>
+
+    <!-- Sem 4 -->
+    <div class="card" onclick="openLightbox(3)">
+      <div class="card-img-wrap">
+        <img src="MCA 4th.pdf" alt="MCA Sem 4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-placeholder" style="display:none">
+          <i class="fa-solid fa-file-pdf"></i>
+          <span>Semester 4</span>
+        </div>
+        <div class="card-overlay"><i class="fa-solid fa-eye"></i> View Card</div>
+      </div>
+      <div class="card-body">
+        <div class="card-sem">MCA · Semester 4</div>
+        <div class="card-title">Fourth Semester Marks Card</div>
+        <div class="card-sub">2025 – 2026</div>
+        <div class="pursuing">Pursuing</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Lightbox Popup Modal -->
+  <div class="lightbox" id="lightbox" onclick="handleOverlayClick(event)">
+    <div class="lb-inner">
+      <div class="lb-header">
+        <div>
+          <div class="lb-title" id="lbTitle"></div>
+          <div class="lb-sub" id="lbSub"></div>
+        </div>
+        <button class="lb-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="lb-img-wrap" id="lbImgWrap"></div>
+      <div class="lb-footer">
+        <div class="lb-nav">
+          <button id="prevBtn" onclick="navigate(-1)"><i class="fa-solid fa-chevron-left"></i> Prev</button>
+          <button id="nextBtn" onclick="navigate(1)">Next <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <span class="lb-counter" id="lbCounter">1 / 4</span>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  const cards = [
-    { file: 'MCA 1ST SEM_watermark.pdf', label: 'MCA — First Semester',  sub: 'Dayananda Sagar College Of Engineering, Bangalore · 2024–2025' },
-    { file: 'MCA 2nd.pdf', label: 'MCA — Second Semester', sub: 'Dayananda Sagar College Of Engineering, Bangalore · 2024–2025' },
-    { file: 'MCA 3RD SEM.pdf', label: 'MCA — Third Semester',  sub: 'Dayananda Sagar College Of Engineering, Bangalore · 2025–2026' },
-    { file: 'MCA 4th.pdf', label: 'MCA — Fourth Semester', sub: 'Dayananda Sagar College Of Engineering, Bangalore · 2025–2026 (Pursuing)' },
-  ];
+  <script>
+    // ── Local PDF Cards Data ──
+    const cards = [
+      { file: 'MCA 1ST SEM_watermark.pdf', label: 'MCA — First Semester',  sub: 'Dayananda Sagar College Of Engineering, Bangalore · 2024–2025' },
+      { file: 'MCA 2nd.pdf', label: 'MCA — Second Semester', sub: 'Dayananda Sagar College Of Engineering, Bangalore · 2024–2025' },
+      { file: 'MCA 3RD SEM.pdf', label: 'MCA — Third Semester',  sub: 'Dayananda Sagar College Of Engineering, Bangalore · 2025–2026' },
+      { file: 'MCA 4th.pdf', label: 'MCA — Fourth Semester', sub: 'Dayananda Sagar College Of Engineering, Bangalore · 2025–2026 (Pursuing)' },
+    ];
 
-  let current = 0;
+    let current = 0;
 
-  function openLightbox(index) {
-    current = index;
-    renderLightbox();
-    document.getElementById('lightbox').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  function handleOverlayClick(e) { if (e.target === document.getElementById('lightbox')) closeLightbox(); }
-  function navigate(dir) {
-    current = Math.max(0, Math.min(cards.length - 1, current + dir));
-    renderLightbox();
-  }
-  function renderLightbox() {
-    const c = cards[current];
-    document.getElementById('lbTitle').textContent = c.label;
-    document.getElementById('lbSub').textContent = c.sub;
-    document.getElementById('lbCounter').textContent = (current + 1) + ' / ' + cards.length;
-    document.getElementById('prevBtn').disabled = current === 0;
-    document.getElementById('nextBtn').disabled = current === cards.length - 1;
-    const wrap = document.getElementById('lbImgWrap');
-    const isPDF = c.file.toLowerCase().endsWith('.pdf');
-    if (isPDF) {
-      wrap.innerHTML = `<iframe src="${c.file}"></iframe>`;
-    } else {
-      wrap.innerHTML = `
-        <img src="${c.file}" alt="${c.label}"
-          onerror="this.style.display='none';document.getElementById('noImg').style.display='flex'">
-        <div id="noImg" class="lb-no-img" style="display:none">
-          <i class="fa-solid fa-image"></i>
-          <p>Image not loaded</p>
-          <small>Expected: <strong>${c.file}</strong> in the same folder</small>
-        </div>`;
+    // ── Lightbox Logic ──
+    function openLightbox(index) {
+      current = index;
+      renderLightbox();
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
-  }
-  document.addEventListener('keydown', e => {
-    const lb = document.getElementById('lightbox');
-    if (!lb.classList.contains('open')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft'  && current > 0)                navigate(-1);
-    if (e.key === 'ArrowRight' && current < cards.length - 1) navigate(1);
-  });
-</script>
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function handleOverlayClick(e) { 
+      if (e.target === document.getElementById('lightbox')) closeLightbox(); 
+    }
+    function navigate(dir) {
+      current = Math.max(0, Math.min(cards.length - 1, current + dir));
+      renderLightbox();
+    }
+    function renderLightbox() {
+      const c = cards[current];
+      document.getElementById('lbTitle').textContent = c.label;
+      document.getElementById('lbSub').textContent = c.sub;
+      document.getElementById('lbCounter').textContent = (current + 1) + ' / ' + cards.length;
+      document.getElementById('prevBtn').disabled = current === 0;
+      document.getElementById('nextBtn').disabled = current === cards.length - 1;
+      
+      const wrap = document.getElementById('lbImgWrap');
+      const isPDF = c.file.toLowerCase().endsWith('.pdf');
+      if (isPDF) {
+        wrap.innerHTML = `<iframe src="${c.file}"></iframe>`;
+      } else {
+        wrap.innerHTML = `
+          <img src="${c.file}" alt="${c.label}"
+            onerror="this.style.display='none';document.getElementById('noImg').style.display='flex'">
+          <div id="noImg" class="lb-no-img" style="display:none">
+            <i class="fa-solid fa-image"></i>
+            <p>Image not loaded</p>
+            <small>Expected: <strong>${c.file}</strong> in the same folder</small>
+          </div>`;
+      }
+    }
+
+    // Keyboard support for Lightbox
+    document.addEventListener('keydown', e => {
+      const lb = document.getElementById('lightbox');
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft'  && current > 0)                navigate(-1);
+      if (e.key === 'ArrowRight' && current < cards.length - 1) navigate(1);
+    });
+
+    // ── Theme Synchronisation System ──
+    const themeToggle = document.getElementById('subThemeToggle');
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(currentTheme);
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      const isDark = theme === 'dark';
+      if(themeToggle) themeToggle.querySelector('i').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+
+    if(themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        setTheme(current === 'dark' ? 'light' : 'dark');
+      });
+    }
+  </script>
 </body>
 </html>
